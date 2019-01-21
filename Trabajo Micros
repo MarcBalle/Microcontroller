@@ -135,7 +135,8 @@ HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_2);
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    if (flag == 1) {
+     /* USER CODE END WHILE */
+ if (flag == 1) {
 	__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 1);
 	__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, 100);
    
@@ -146,16 +147,24 @@ HAL_ADC_PollForConversion(&hadc1,HAL_MAX_DELAY);
 	ADCValue=HAL_ADC_GetValue(&hadc1);
 HAL_ADC_Stop(&hadc1);
 	
-	
-	HAL_ADC_Start( &hadc2);
+HAL_ADC_Start( &hadc2);
 HAL_ADC_PollForConversion(&hadc2,HAL_MAX_DELAY);
 	ADCValue2=HAL_ADC_GetValue(&hadc2);
 HAL_ADC_Stop(&hadc2);
-
+	
 
 	__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, ADCValue);
-
-  __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, ADCValue2);
+		
+	if ( ADCValue2 < 0x020) {
+		LED_AZUL = ADCValue2 / 1.5;
+ 		 __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, LED_AZUL);
+		
+	}
+	else 
+		__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, ADCValue2);
+		
+	
+    /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
 }
